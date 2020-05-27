@@ -8,7 +8,8 @@ import (
 	"github.com/libp2p/go-libp2p-core/peer"
 		"github.com/libp2p/go-libp2p-core/sec"
 	"io"
-	)
+	"fmt"
+)
 
 func newServerConn()(net.Conn) {
 	lstnr, err := net.Listen("tcp", "localhost:8981")
@@ -30,7 +31,7 @@ func newServerConn()(net.Conn) {
 	return server
 }
 
-func newTransport(typ, bits int) *secio.Transport {
+func NewTransport(typ, bits int) *secio.Transport {
 	priv, pub, err := ci.GenerateKeyPair(typ, bits)
 	if err != nil {
 		print(err)
@@ -45,19 +46,20 @@ func newTransport(typ, bits int) *secio.Transport {
 	}
 }
 
-func ReadWrite( serverConn sec.SecureConn) {
+func ReadBuf( serverConn sec.SecureConn) {
 
 	after := make([]byte, 100)
 	_, err := io.ReadFull(serverConn, after)
 	if err != nil {
 		print(err)
 	}
+	fmt.Printf("%s", after)
 }
 
 
 func main()  {
 	server := newServerConn()
-	serverTpt := newTransport(ci.Ed25519, 2048)
+	serverTpt := NewTransport(ci.Ed25519, 2048)
 	serverConn, _ := serverTpt.SecureInbound(context.TODO(), server)
-	ReadWrite(serverConn)
+	ReadBuf(serverConn)
 }
