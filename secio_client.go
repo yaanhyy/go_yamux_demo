@@ -54,6 +54,10 @@ func WriteBuf( clientConn sec.SecureConn) {
 func main()  {
 	client := newClientConn()
 	clientTpt := NewTransport(ci.Secp256k1, 2048)
-	clientConn, _ :=clientTpt.SecureOutbound(context.TODO(), client, "")
-	WriteBuf(clientConn)
+	clientConn, err :=clientTpt.SecureOutbound(context.TODO(), client, "")
+	if err == nil {
+		WriteBuf(clientConn)
+	} else {
+		fmt.Printf("%+v", err)
+	}
 }

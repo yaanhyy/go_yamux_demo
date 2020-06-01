@@ -7,12 +7,15 @@ import (
 	"time"
 )
 
-func Recv(stream net.Conn, id int){
+func Recv(session *yamux.Session,stream net.Conn, id int){
 	for {
-		buf := make([]byte, 4)
+		buf := make([]byte, 15)
 		n, err := stream.Read(buf)
 		if err == nil{
 			fmt.Println("ID:", id, ", len:", n, time.Now().Unix(), string(buf))
+			stream.Write([]byte("server ok" ))
+			stream1, _ := session.Open()
+			stream1.Write([]byte("pong"))
 		}else{
 			fmt.Println(time.Now().Unix(), err)
 			return
@@ -33,7 +36,7 @@ func main()  {
 		if err == nil {
 			fmt.Println("accept")
 			id ++
-			go Recv(stream, id)
+			go Recv(session, stream, id)
 		}else{
 			fmt.Println("session over.", err)
 			return

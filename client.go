@@ -4,6 +4,7 @@ import (
 "github.com/hashicorp/yamux"
 "net"
 "time"
+	"fmt"
 )
 
 func main()  {
@@ -16,7 +17,13 @@ func main()  {
 	stream.Write([]byte("ping" ))
 	stream.Write([]byte("pnng" ))
 	time.Sleep(1 * time.Second)
+	buf := make([]byte, 100)
 
+	n, err := stream.Read(buf)
+	if err == nil{
+		fmt.Println("len:", n, time.Now().Unix(), string(buf))
+
+	}
 	// 建立应用流通道2
 	stream1, _ := session.Open()
 	stream1.Write([]byte("pong"))
