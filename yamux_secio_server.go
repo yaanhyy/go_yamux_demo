@@ -13,7 +13,7 @@ import (
 
 func Recv(stream net.Conn, id int){
 	for {
-		buf := make([]byte, 4)
+		buf := make([]byte, 50)
 		n, err := stream.Read(buf)
 		if err == nil{
 			fmt.Println("ID:", id, ", len:", n, time.Now().Unix(), string(buf))
