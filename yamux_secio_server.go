@@ -12,13 +12,17 @@ import (
 )
 
 func Recv(session *yamux.Session, stream net.Conn, id int){
+	stream1, _ := session.Open()
+	index := 0
 	for {
 		buf := make([]byte, 50)
 		n, err := stream.Read(buf)
 		if err == nil{
 			fmt.Println("ID:", id, ", len:", n, time.Now().Unix(), string(buf))
-			stream1, _ := session.Open()
-			stream1.Write([]byte("pong"))
+
+			stream.Write([]byte("pong"+string(index)))
+			stream1.Write([]byte("stream1"+string(index)))
+			index += 1
 		}else{
 			fmt.Println(time.Now().Unix(), err)
 			return
