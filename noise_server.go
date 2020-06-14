@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/libp2p/go-libp2p-core/peer"
 	"net"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"context"
@@ -46,15 +47,17 @@ func (priv privKey)Read(p []byte) (n int, err error) {
 
 
 func NewNoiseTransport(typ, bits int) *noise.Transport {
-	//priv, _, err := crypto.GenerateKeyPairWithReader(typ, bits, privKey{})
-	priv, _, err := crypto.GenerateKeyPair(typ, bits)
+	priv, pub, err := crypto.GenerateKeyPairWithReader(typ, bits, privKey{})
+	//priv, _, err := crypto.GenerateKeyPair(typ, bits)
 	if err != nil {
 		print(err)
 	}
-	//id, err := peer.IDFromPublicKey(pub)
-	//if err != nil {
-	//	print(err)
-	//}
+	id, err := peer.IDFromPublicKey(pub)
+	if err != nil {
+		print(err)
+	} else {
+		fmt.Printf("id:%s", id)
+	}
 
 	transport,err := noise.New(priv)
 	return  transport
