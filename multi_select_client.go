@@ -8,7 +8,7 @@ import (
 
 func newClientConn()(net.Conn) {
 
-	client, clientErr := net.Dial("tcp", "localhost:8981")
+	client, clientErr := net.Dial("tcp", "localhost:5679")
 
 	if clientErr != nil {
 		print("Failed to accept:", clientErr)
