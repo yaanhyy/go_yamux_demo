@@ -30,7 +30,23 @@ func newServerConn()(net.Conn) {
 	return server
 }
 
+type privKey struct {
+
+}
+
+func (priv privKey)Read(p []byte) (n int, err error) {
+	src  := make([]byte, 32)
+	for i := 0; i<32; i++ {
+		src[i] = byte(i)
+	}
+	len := copy(p, src)
+	return len, nil
+}
+
+
+
 func NewNoiseTransport(typ, bits int) *noise.Transport {
+	//priv, _, err := crypto.GenerateKeyPairWithReader(typ, bits, privKey{})
 	priv, _, err := crypto.GenerateKeyPair(typ, bits)
 	if err != nil {
 		print(err)
@@ -39,6 +55,7 @@ func NewNoiseTransport(typ, bits int) *noise.Transport {
 	//if err != nil {
 	//	print(err)
 	//}
+
 	transport,err := noise.New(priv)
 	return  transport
 
@@ -55,8 +72,9 @@ func ReadBuf( serverConn sec.SecureConn) {
 }
 
 func main()  {
-	server := newServerConn()
 	serverTpt := NewNoiseTransport(crypto.Ed25519, 2048)
+	server := newServerConn()
+
 	serverConn, _ := serverTpt.SecureInbound(context.TODO(), server)
 	ReadBuf(serverConn)
 }

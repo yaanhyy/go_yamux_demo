@@ -10,6 +10,7 @@ import (
 
 func NewNoiseTransport(typ, bits int) *noise.Transport {
 	priv, _, err := crypto.GenerateKeyPair(typ, bits)
+	localID, err := peer.IDFromPrivateKey(priv)
 	if err != nil {
 		print(err)
 	}
@@ -38,7 +39,7 @@ func newClientConn()(net.Conn) {
 func main() {
 	client := newClientConn()
 	initTransport := NewNoiseTransport(crypto.Ed25519, 2048)
-	secureConn, err := initTransport.SecureOutbound(context.TODO(), client, "12D3KooWNWJ98NujpQb4WwxNmKoqYVuAa5Wo8iZz8X99ArBwcRrY")
+	secureConn, err := initTransport.SecureOutbound(context.TODO(), client, "CovLVG4fQcqPX1T7PNhu16h1XL8eLCvAWsWPSF1MJyCUwH7fEJ6CMw2VjSMFdFVQDLrd1UM")
 	if err == nil {
 		before := []byte("hello world")
 		secureConn.Write(before)
