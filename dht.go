@@ -9,6 +9,8 @@ import (
 	"github.com/libp2p/go-libp2p-swarm"
 	bhost "github.com/libp2p/go-libp2p/p2p/host/basic"
 
+	//"github.com/whyrusleeping/go-logging"
+
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/libp2p/go-libp2p-secio"
 	"github.com/libp2p/go-tcp-transport"
@@ -22,10 +24,12 @@ import (
 	"github.com/libp2p/go-libp2p-testing/net"
 	"github.com/libp2p/go-libp2p-core/peerstore"
 	ma "github.com/multiformats/go-multiaddr"
+	log2 "github.com/ipfs/go-log/v2"
+	logging "github.com/ipfs/go-log"
 
 )
-
-var testPrefix = dht.ProtocolPrefix("/ipfs")
+var logger     = logging.Logger("dht")
+var testPrefix = dht.ProtocolPrefix("/test")
 
 type blankValidator struct{}
 
@@ -35,8 +39,8 @@ func (blankValidator) Select(_ string, _ [][]byte) (int, error) { return 0, nil 
 
 func setupDHT(ctx context.Context,  client bool, options ...dht.Option) *dht.IpfsDHT {
 	baseOpts := []dht.Option{
-		//testPrefix,
-		dht.NamespacedValidator("/pk", blankValidator{}),
+		testPrefix,
+		dht.NamespacedValidator("v", blankValidator{}),
 		dht.DisableAutoRefresh(),
 	}
 
@@ -49,7 +53,7 @@ func setupDHT(ctx context.Context,  client bool, options ...dht.Option) *dht.Ipf
 	d, err := dht.New(
 		ctx,
 		bhost.New(GenSwarm(ctx, false)),
-		//append(baseOpts, options...)...,
+		append(baseOpts, options...)...,
 	)
 	if err != nil {
 		fmt.Printf("dht new err:%+v", err)
@@ -157,6 +161,8 @@ func NewTransport(typ, bits int) *secio.Transport {
 
 
 func main() {
+	log2.SetAllLoggers(log2.LevelDebug)
+	logger.Debugf("refreshing DHTs routing tables...")
 	//server := newServerConn()
 	//serverTpt := NewTransport(ci.Ed25519, 2048)
 	//serverTpt.SecureInbound(context.TODO(), server)

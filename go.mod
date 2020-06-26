@@ -14,6 +14,7 @@ require (
 	github.com/ipfs/go-ipfs-util v0.0.1
 	github.com/ipfs/go-ipns v0.0.2
 	github.com/ipfs/go-log v1.0.4
+	github.com/ipfs/go-log/v2 v2.1.1 // indirect
 	github.com/jbenet/goprocess v0.1.4
 	github.com/libp2p/go-eventbus v0.1.0
 	github.com/libp2p/go-libp2p v0.8.2
@@ -35,5 +36,5 @@ require (
 	github.com/stretchr/testify v1.5.1
 	github.com/whyrusleeping/go-keyspace v0.0.0-20160322163242-5b898ac5add1
 	go.opencensus.io v0.22.3
-	go.uber.org/zap v1.14.1
+	go.uber.org/zap v1.15.0
 )
