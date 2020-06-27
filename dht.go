@@ -40,8 +40,8 @@ func (blankValidator) Select(_ string, _ [][]byte) (int, error) { return 0, nil 
 
 func setupDHT(ctx context.Context,  client bool, options ...dht.Option) *dht.IpfsDHT {
 	baseOpts := []dht.Option{
-		testPrefix,
-		dht.NamespacedValidator("v", blankValidator{}),
+		ipfsPrefix,
+	//	dht.NamespacedValidator("v", blankValidator{}),
 		dht.DisableAutoRefresh(),
 	}
 
