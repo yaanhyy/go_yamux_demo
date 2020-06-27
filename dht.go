@@ -30,6 +30,7 @@ import (
 )
 var logger     = logging.Logger("dht")
 var testPrefix = dht.ProtocolPrefix("/test")
+var ipfsPrefix = dht.ProtocolPrefix("/ipfs")
 
 type blankValidator struct{}
 
@@ -168,7 +169,7 @@ func main() {
 	//serverTpt.SecureInbound(context.TODO(), server)
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	setupDHT(ctx ,  false)
+	//setupDHT(ctx ,  false)
 	dht:=setupDHT(ctx ,  false)
 	dht.PeerID()
 	//dht.Process()
