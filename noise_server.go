@@ -66,11 +66,12 @@ func NewNoiseTransport(typ, bits int) *noise.Transport {
 
 func ReadBuf( serverConn sec.SecureConn) {
 
-	after := make([]byte, 100)
+	after := make([]byte, 5)
 	_, err := io.ReadFull(serverConn, after)
 	if err != nil {
 		print(err.Error())
 	}
+	serverConn.Write([]byte("gut"))
 	fmt.Printf("%s", after)
 }
 

@@ -30,13 +30,10 @@ func NewNoiseTransport(typ, bits int) *noise.Transport {
 
 func newClientConn()(net.Conn) {
 
-	client, clientErr := net.Dial("tcp", "localhost:8981")
-
+	client, clientErr := net.Dial("tcp", "localhost:5679")
 	if clientErr != nil {
 		print("Failed to accept:", clientErr)
 	}
-
-
 
 	return client
 }
@@ -63,11 +60,14 @@ func main() {
 	//_, pub, err := crypto.GenerateKeyPairWithReader(crypto.Ed25519, 2048, privKey{})
 	//id, err := peer.IDFromPublicKey(pub)
 	//secureConn, err := initTransport.SecureOutbound(context.TODO(), client, id)
-	id, _ := peer.Decode("12D3KooWA4Xop1JaT3MHxwYMkCepYsv4iPVopMXwCz5iHYdBfeSB")
+	id, _ := peer.Decode("12D3KooWA4Xop1JaT3MHxwYMkCepYsv4iPVopMXwCz5iHYdBfeSA")
 	secureConn, err := initTransport.SecureOutbound(context.TODO(), client, id)
 	if err == nil {
+		print("send msg")
 		before := []byte("hello world")
 		secureConn.Write(before)
+		secureConn.Read(before)
+		fmt.Printf("rec:%+v", before)
 	} else {
 		fmt.Printf("%+v", err)
 	}
